@@ -76,18 +76,12 @@ If `npm run dev` fails, please check the following common issues:
     *   For the App Router setup (if you initially chose `--app` with `create-next-app`), ensure `src/app/layout.tsx` and `src/app/page.tsx` exist, and that `src/app/page.tsx` includes `'use client';` at the very top as it uses client-side hooks. If you chose the Pages Router (`--no-app`), `src/pages/_app.tsx` and `src/pages/_document.tsx` are typically present alongside `src/pages/index.tsx`.
 
 ## 🤝 Contributing & Seeking Help
-This project is actively under development, and I warmly welcome any contributions or insights!
 
-**My Learning Style:**
-I learn best by understanding and adapting existing code. While I can read, comprehend, and debug complex code very well, I often find it challenging to initiate new features or implement fresh architectural patterns from a blank slate.
+This project is actively under development, and I warmly invite contributions and insights from experienced web and app developers.
 
-**How You Can Help:**
-If you're looking to contribute or provide guidance, I'm particularly interested in:
+The current application's functionality has largely been developed through an intuitive, "vibe-coding" approach. While I possess a strong understanding of the existing codebase and have actively participated in its creation by integrating, adapting, and refining its components (not merely copying code), initiating entirely new features or implementing novel architectural patterns from a blank slate remains a significant challenge.
 
-*   **Debugging Assistance**: Helping me get the project to compile and run reliably if you encounter errors I'm stuck on.
-*   **Concrete Code Examples**: Providing small, focused code snippets that demonstrate how to implement a specific feature or pattern.
-*   **Architectural Patterns**: Illustrating architectural concepts with small, practical code examples relevant to this project.
-*   **Step-by-Step Implementation "Recipes"**: A clear, ordered list of actions to take when building out a new module.
+If you're looking to contribute, providing concrete code examples, specific design patterns, or structured implementation steps would be particularly valuable. Please feel free to open issues or submit pull requests. Your expertise in advancing this application is highly valued and immensely appreciated.
 
 Please feel free to open issues on this repository or submit pull requests. Your help in refining this application and guiding its development is immensely appreciated!
 
