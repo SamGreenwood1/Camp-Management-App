@@ -94,4 +94,5 @@ Please feel free to open issues on this repository or submit pull requests. Your
 ## 📄 License
 This project is currently licensed under the **MIT License**.
 
-**Please Note:** While in development, the project is openly licensed under MIT. However, once the application is ready for a formal release, it is likely to be relicensed. See `LICENSE` for the current full text.
+**Please Note:** While in development, the project is openly licensed under MIT. However, once the application is ready for a formal release, it is likely to be relicensed. See [[LICENSE]] for the current full text.
+
