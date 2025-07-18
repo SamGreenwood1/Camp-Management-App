@@ -1,7 +1,12 @@
 // pages/index.tsx
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import ScheduleDisplay from '../src/components/ScheduleDisplay'; // Adjust path if your structure differs
+import ScheduleDisplay from '../components/ScheduleDisplay';
+import ProgramSheetUpload from '../components/ProgramSheetUpload';
+// import UserManagement from '../components/UserManagement'; // Placeholder for future
+// import AdminDashboard from '../components/AdminDashboard'; // Placeholder for future
+
+// TODO: Replace with real data source or API
 import {
   cabins_data,
   units_data,
@@ -9,24 +14,11 @@ import {
   activity_areas_data,
   session_dates_data,
   scheduling_config_data
-} from '../src/data/testData'; // Adjust path if your structure differs
+} from '../data/testData';
 
-// Create a client for TanStack Query.
-// This client holds the cache and configuration for all your queries.
 const queryClient = new QueryClient();
 
-/**
- * Main page component for the Camp Schedule Application.
- * It sets up the TanStack Query provider and renders the ScheduleDisplay component.
- */
 const HomePage: React.FC = () => {
-  // In a real application, this data might come from API calls,
-  // server-side props (getServerSideProps), or a global state manager.
-  // For this independent test, we're using the mock data.
-
-  // Using spread syntax (...) to create copies of array/object data.
-  // This helps ensure immutability if any part of your UI or logic
-  // were to accidentally modify the original test data.
   const mockCabins = [...cabins_data];
   const mockUnits = [...units_data];
   const mockAgeSubGroups = [...age_sub_groups_data];
@@ -35,19 +27,94 @@ const HomePage: React.FC = () => {
   const mockSchedulingConfig = { ...scheduling_config_data };
 
   return (
-    // QueryClientProvider must wrap any components that use TanStack Query hooks.
     <QueryClientProvider client={queryClient}>
-      <div style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto', fontFamily: 'Arial, sans-serif' }}>
-        <h1>Camp Programming Management App</h1>
-        <p>This is a demonstration of the daily activity scheduling component.</p>
-        <ScheduleDisplay
-          cabins={mockCabins}
-          units={mockUnits}
-          ageSubGroups={mockAgeSubGroups}
-          activityAreas={mockActivityAreas}
-          sessionDates={mockSessionDates}
-          schedulingConfig={mockSchedulingConfig}
-        />
+      <div style={{
+        minHeight: '100vh',
+        background: '#f7fafc',
+        fontFamily: 'Inter, Arial, sans-serif',
+        padding: '0',
+        margin: '0',
+      }}>
+        <header style={{
+          background: '#2b6cb0',
+          color: 'white',
+          padding: '32px 0 16px 0',
+          textAlign: 'center',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+        }}>
+          <h1 style={{ fontSize: '2.5rem', margin: 0 }}>Camp Programming Management App</h1>
+          <p style={{ fontSize: '1.2rem', margin: '8px 0 0 0' }}>
+            Centralized dashboard for scheduling, program management, and staff roles.
+          </p>
+        </header>
+        <main style={{
+          maxWidth: '1200px',
+          margin: '32px auto',
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: '32px',
+        }}>
+          {/* Daily Schedule Section */}
+          <section style={{
+            background: 'white',
+            borderRadius: '12px',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+            padding: '24px',
+            gridColumn: '1 / 3',
+          }}>
+            <h2 style={{ marginTop: 0 }}>Daily Schedule</h2>
+            <ScheduleDisplay
+              cabins={mockCabins}
+              units={mockUnits}
+              ageSubGroups={mockAgeSubGroups}
+              activityAreas={mockActivityAreas}
+              sessionDates={mockSessionDates}
+              schedulingConfig={mockSchedulingConfig}
+            />
+          </section>
+
+          {/* Program Bank Section */}
+          <section style={{
+            background: 'white',
+            borderRadius: '12px',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+            padding: '24px',
+          }}>
+            <h2 style={{ marginTop: 0 }}>Program Bank</h2>
+            <p>Upload and manage camp program sheets. Extract details with AI.</p>
+            <ProgramSheetUpload />
+          </section>
+
+          {/* User/Role Management Section (Placeholder) */}
+          <section style={{
+            background: 'white',
+            borderRadius: '12px',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+            padding: '24px',
+          }}>
+            <h2 style={{ marginTop: 0 }}>User & Role Management</h2>
+            <p>Manage staff accounts, roles, and permissions. (Coming soon)</p>
+          </section>
+
+          {/* Technical Admin Dashboard Section (Placeholder) */}
+          <section style={{
+            background: 'white',
+            borderRadius: '12px',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+            padding: '24px',
+          }}>
+            <h2 style={{ marginTop: 0 }}>Technical Admin Dashboard</h2>
+            <p>System health, logs, and integrations. (Coming soon)</p>
+          </section>
+        </main>
+        <footer style={{
+          textAlign: 'center',
+          color: '#718096',
+          fontSize: '0.95rem',
+          padding: '24px 0 12px 0',
+        }}>
+          &copy; {new Date().getFullYear()} Camp Programming Management App
+        </footer>
       </div>
     </QueryClientProvider>
   );
