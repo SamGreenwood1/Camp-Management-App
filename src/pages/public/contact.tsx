@@ -1,17 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useForm } from '@tanstack/react-form';
 
 const ContactPage: React.FC = () => {
-  const [form, setForm] = useState({ name: '', email: '', message: '' });
-  const [submitted, setSubmitted] = useState(false);
+  const form = useForm({
+    defaultValues: {
+      name: '',
+      email: '',
+      message: '',
+    },
+    onSubmit: async ({ value }) => {
+      form.setFieldValue('submitted', true);
+    },
+  });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitted(true);
-  };
+  // Add a custom field for submission state
+  form.registerField('submitted', { defaultValue: false });
 
   return (
     <div style={{ minHeight: '100vh', background: '#f7fafc', fontFamily: 'Inter, Arial, sans-serif' }}>
@@ -39,14 +42,14 @@ const ContactPage: React.FC = () => {
           <div><strong>Phone:</strong> (555) 123-4567</div>
           <div><strong>Address:</strong> 123 Camp Lane, Greenwood, State, ZIP</div>
         </div>
-        <form onSubmit={handleSubmit} style={{ maxWidth: 400, margin: '0 auto', textAlign: 'left' }}>
+        <form onSubmit={form.handleSubmit} style={{ maxWidth: 400, margin: '0 auto', textAlign: 'left' }}>
           <label style={{ display: 'block', marginBottom: 8 }}>
             Name:
             <input
               type="text"
-              name="name"
-              value={form.name}
-              onChange={handleChange}
+              name={form.fields.name.name}
+              value={form.fields.name.value}
+              onChange={form.fields.name.handleChange}
               required
               style={{ width: '100%', padding: 8, borderRadius: 4, border: '1px solid #cbd5e0', marginTop: 4, marginBottom: 16 }}
             />
@@ -55,9 +58,9 @@ const ContactPage: React.FC = () => {
             Email:
             <input
               type="email"
-              name="email"
-              value={form.email}
-              onChange={handleChange}
+              name={form.fields.email.name}
+              value={form.fields.email.value}
+              onChange={form.fields.email.handleChange}
               required
               style={{ width: '100%', padding: 8, borderRadius: 4, border: '1px solid #cbd5e0', marginTop: 4, marginBottom: 16 }}
             />
@@ -65,9 +68,9 @@ const ContactPage: React.FC = () => {
           <label style={{ display: 'block', marginBottom: 8 }}>
             Message:
             <textarea
-              name="message"
-              value={form.message}
-              onChange={handleChange}
+              name={form.fields.message.name}
+              value={form.fields.message.value}
+              onChange={form.fields.message.handleChange}
               required
               rows={4}
               style={{ width: '100%', padding: 8, borderRadius: 4, border: '1px solid #cbd5e0', marginTop: 4, marginBottom: 16 }}
@@ -77,7 +80,7 @@ const ContactPage: React.FC = () => {
             Send Message
           </button>
         </form>
-        {submitted && <div style={{ color: '#38a169', marginTop: 24, fontWeight: 600 }}>Thank you! Your message has been received.</div>}
+        {form.getFieldValue('submitted') && <div style={{ color: '#38a169', marginTop: 24, fontWeight: 600 }}>Thank you! Your message has been received.</div>}
       </main>
       <footer style={{ textAlign: 'center', color: '#718096', fontSize: '0.95rem', padding: '24px 0 12px 0' }}>
         &copy; {new Date().getFullYear()} Camp Greenwood

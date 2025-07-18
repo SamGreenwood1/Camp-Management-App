@@ -3,6 +3,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ScheduleDisplay from '../components/ScheduleDisplay';
 import ProgramSheetUpload from '../components/ProgramSheetUpload';
+import ProgramBankTable from '../components/ProgramBankTable';
 // import UserManagement from '../components/UserManagement'; // Placeholder for future
 // import AdminDashboard from '../components/AdminDashboard'; // Placeholder for future
 
@@ -82,6 +83,7 @@ const HomePage: React.FC = () => {
           }}>
             <h2 style={{ marginTop: 0 }}>Program Bank</h2>
             <p>Upload and manage camp program sheets. Extract details with AI.</p>
+            <ProgramBankTable />
             <ProgramSheetUpload />
           </section>
 

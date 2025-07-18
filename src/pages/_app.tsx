@@ -1,12 +1,12 @@
 import { ClerkProvider } from '@clerk/nextjs';
-import type { AppProps } from 'next/app';
+import AppRouter from '../AppRouter';
 
 const clerkPubKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || '';
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp() {
   return (
     <ClerkProvider publishableKey={clerkPubKey}>
-      <Component {...pageProps} />
+      <AppRouter />
     </ClerkProvider>
   );
 }
