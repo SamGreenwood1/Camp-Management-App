@@ -1,0 +1,24 @@
+{
+  "name": "camp-management-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SamGreenwood1/Camp-Management-App.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/SamGreenwood1/Camp-Management-App/issues"
+  },
+  "homepage": "https://github.com/SamGreenwood1/Camp-Management-App#readme",
+  "dependencies": {
+    "@tanstack/react-query": "^5.83.0"
+  }
+}
