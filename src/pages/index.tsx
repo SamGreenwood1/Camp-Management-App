@@ -104,7 +104,28 @@ const HomePage: React.FC = () => {
             padding: '24px',
           }}>
             <h2 style={{ marginTop: 0 }}>Technical Admin Dashboard</h2>
-            <p>System health, logs, and integrations. (Coming soon)</p>
+            <p>System health, logs, and integrations.</p>
+            <div style={{ marginTop: 24 }}>
+              <h3 style={{ color: '#2b6cb0', fontSize: '1.1rem' }}>Camp Administration App Integrations</h3>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                {[
+                  { name: 'CampInTouch', status: 'Not Connected' },
+                  { name: 'CampMinder', status: 'Not Connected' },
+                  { name: 'CampDoc', status: 'Not Connected' },
+                  { name: 'Campwise', status: 'Not Connected' },
+                ].map((integration) => (
+                  <li key={integration.name} style={{ marginBottom: 16, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <span><strong>{integration.name}</strong> <span style={{ color: '#718096', fontWeight: 400 }}>({integration.status})</span></span>
+                    <button style={{ background: '#2b6cb0', color: 'white', border: 'none', borderRadius: 4, padding: '6px 18px', fontWeight: 600, cursor: 'pointer' }} disabled>
+                      Connect
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <p style={{ color: '#718096', fontSize: '0.95rem', marginTop: 24 }}>
+              (Integration setup coming soon. Contact your admin for details.)
+            </p>
           </section>
         </main>
         <footer style={{
