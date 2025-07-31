@@ -3,22 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-<<<<<<< Updated upstream
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vite build",
     "preview": "vite preview",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-=======
-"scripts": {
-  "dev": "vite",
-  "build": "vite build",
-  "preview": "vite preview",
-  "test": "echo \"Error: no test specified\" && exit 1"
-}
-
->>>>>>> Stashed changes
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SamGreenwood1/Camp-Management-App.git"
@@ -37,6 +27,7 @@
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
+    "@vitejs/plugin-react": "^4.7.0",
     "vite": "^7.0.5"
   }
 }
