@@ -1,56 +1,332 @@
 import React from 'react';
-import { SignInButton, SignUpButton, UserButton, useUser } from '@clerk/nextjs';
 
 const PublicLandingPage: React.FC = () => {
-  const { isSignedIn } = useUser();
-
   return (
-    <div style={{ minHeight: '100vh', background: '#f7fafc', fontFamily: 'Inter, Arial, sans-serif' }}>
-      <nav style={{
-        background: '#2b6cb0',
-        color: 'white',
-        padding: '18px 0',
-        textAlign: 'center',
-        fontSize: '1.2rem',
-        letterSpacing: '0.5px',
-        marginBottom: '0',
+    <div className="landing-page" style={{ 
+      fontFamily: 'Segoe UI, Arial, sans-serif', 
+      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      minHeight: '100vh',
+      color: 'white'
+    }}>
+      {/* Hero Section */}
+      <div style={{ 
+        textAlign: 'center', 
+        padding: '80px 20px 60px',
+        maxWidth: '1200px',
+        margin: '0 auto'
       }}>
-        <span style={{ fontWeight: 700, fontSize: '1.5rem', marginRight: 24 }}>Camp Greenwood</span>
-        <a href="/public" style={{ color: 'white', margin: '0 16px', textDecoration: 'none' }}>Home</a>
-        <a href="/public/about" style={{ color: 'white', margin: '0 16px', textDecoration: 'none' }}>About</a>
-        <a href="/public/contact" style={{ color: 'white', margin: '0 16px', textDecoration: 'none' }}>Contact</a>
-        {isSignedIn ? (
-          <>
-            <UserButton />
-            <a href="/" style={{ color: '#fed766', marginLeft: 32, fontWeight: 600 }}>Go to Dashboard</a>
-          </>
-        ) : (
-          <span style={{ marginLeft: 32 }}>
-            <SignInButton mode="modal">
-              <button style={{ background: '#fed766', color: '#2b6cb0', border: 'none', borderRadius: 4, padding: '6px 18px', fontWeight: 600, cursor: 'pointer', marginRight: 8 }}>Sign In</button>
-            </SignInButton>
-            <SignUpButton mode="modal">
-              <button style={{ background: '#2b6cb0', color: 'white', border: 'none', borderRadius: 4, padding: '6px 18px', fontWeight: 600, cursor: 'pointer' }}>Sign Up</button>
-            </SignUpButton>
-          </span>
-        )}
-      </nav>
-      <main style={{ maxWidth: 700, margin: '48px auto', background: 'white', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.07)', padding: 40, textAlign: 'center' }}>
-        <h1 style={{ fontSize: '2.5rem', color: '#2b6cb0', marginBottom: 12 }}>Welcome to Camp Greenwood</h1>
-        <p style={{ fontSize: '1.2rem', color: '#4a5568', marginBottom: 32 }}>
-          Inspiring growth, friendship, and adventure in the great outdoors. Discover our programs, meet our staff, and see why generations of campers call Greenwood their summer home.
+        <h1 style={{ 
+          fontSize: '3.5rem', 
+          fontWeight: '700', 
+          marginBottom: '24px',
+          textShadow: '0 4px 8px rgba(0,0,0,0.3)'
+        }}>
+          Camp Management App
+        </h1>
+        <p style={{ 
+          fontSize: '1.5rem', 
+          marginBottom: '40px',
+          opacity: '0.9',
+          maxWidth: '800px',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          lineHeight: '1.6'
+        }}>
+          Streamline your summer camp operations with intelligent scheduling, 
+          program management, and staff coordination.
         </p>
-        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80" alt="Camp" style={{ width: '100%', borderRadius: 10, marginBottom: 32, maxHeight: 320, objectFit: 'cover' }} />
-        <div style={{ display: 'flex', justifyContent: 'center', gap: 24, marginBottom: 32 }}>
-          <a href="/public/about" style={{ background: '#2b6cb0', color: 'white', padding: '12px 32px', borderRadius: 6, fontWeight: 600, textDecoration: 'none', fontSize: '1.1rem' }}>Learn More</a>
-          <a href="/public/contact" style={{ background: '#fed766', color: '#2b6cb0', padding: '12px 32px', borderRadius: 6, fontWeight: 600, textDecoration: 'none', fontSize: '1.1rem' }}>Contact Us</a>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap' }}>
+          <button style={{ 
+            background: '#4CAF50', 
+            color: 'white', 
+            border: 'none', 
+            borderRadius: '8px', 
+            padding: '16px 32px', 
+            fontSize: '18px', 
+            fontWeight: '600', 
+            cursor: 'pointer',
+            boxShadow: '0 4px 12px rgba(76,175,80,0.3)',
+            transition: 'all 0.3s ease'
+          }}>
+            Get Started
+          </button>
+          <button style={{ 
+            background: 'transparent', 
+        color: 'white',
+            border: '2px solid white', 
+            borderRadius: '8px', 
+            padding: '16px 32px', 
+            fontSize: '18px', 
+            fontWeight: '600', 
+            cursor: 'pointer',
+            transition: 'all 0.3s ease'
+          }}>
+            Learn More
+          </button>
         </div>
-        <div style={{ color: '#718096', fontSize: '1rem', marginTop: 24 }}>
-          <strong>Already staff?</strong> <a href="/" style={{ color: '#2b6cb0', textDecoration: 'underline' }}>Sign in to the dashboard</a>
+      </div>
+
+      {/* Features Section */}
+      <div style={{ 
+        background: 'rgba(255,255,255,0.1)', 
+        padding: '80px 20px',
+        backdropFilter: 'blur(10px)'
+      }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <h2 style={{ 
+            textAlign: 'center', 
+            fontSize: '2.5rem', 
+            marginBottom: '60px',
+            fontWeight: '600'
+          }}>
+            Powerful Features for Modern Camps
+          </h2>
+          
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', 
+            gap: '40px' 
+          }}>
+            {/* Feature 1 */}
+            <div style={{ 
+              background: 'rgba(255,255,255,0.1)', 
+              padding: '32px', 
+              borderRadius: '16px',
+              border: '1px solid rgba(255,255,255,0.2)',
+              backdropFilter: 'blur(10px)'
+            }}>
+              <div style={{ 
+                background: '#4CAF50', 
+                width: '60px', 
+                height: '60px', 
+                borderRadius: '50%', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                marginBottom: '24px',
+                fontSize: '24px'
+              }}>
+                🧠
+              </div>
+              <h3 style={{ fontSize: '1.5rem', marginBottom: '16px', fontWeight: '600' }}>
+                Intelligent Scheduling
+              </h3>
+              <p style={{ opacity: '0.9', lineHeight: '1.6' }}>
+                Advanced algorithms automatically assign cabins to activities while respecting 
+                capacity limits, travel time, and camper preferences.
+              </p>
+            </div>
+
+            {/* Feature 2 */}
+            <div style={{ 
+              background: 'rgba(255,255,255,0.1)', 
+              padding: '32px', 
+              borderRadius: '16px',
+              border: '1px solid rgba(255,255,255,0.2)',
+              backdropFilter: 'blur(10px)'
+            }}>
+              <div style={{ 
+                background: '#2196F3', 
+                width: '60px', 
+                height: '60px', 
+                borderRadius: '50%', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                marginBottom: '24px',
+                fontSize: '24px'
+              }}>
+                📚
+              </div>
+              <h3 style={{ fontSize: '1.5rem', marginBottom: '16px', fontWeight: '600' }}>
+                Program Bank
+              </h3>
+              <p style={{ opacity: '0.9', lineHeight: '1.6' }}>
+                Centralized repository for all camp programs with AI-powered document 
+                processing and approval workflows.
+              </p>
+            </div>
+
+            {/* Feature 3 */}
+            <div style={{ 
+              background: 'rgba(255,255,255,0.1)', 
+              padding: '32px', 
+              borderRadius: '16px',
+              border: '1px solid rgba(255,255,255,0.2)',
+              backdropFilter: 'blur(10px)'
+            }}>
+              <div style={{ 
+                background: '#FF9800', 
+                width: '60px', 
+                height: '60px', 
+                borderRadius: '50%', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                marginBottom: '24px',
+                fontSize: '24px'
+              }}>
+                👥
+              </div>
+              <h3 style={{ fontSize: '1.5rem', marginBottom: '16px', fontWeight: '600' }}>
+                Staff Management
+              </h3>
+              <p style={{ opacity: '0.9', lineHeight: '1.6' }}>
+                Role-based access control, staff scheduling, and seamless coordination 
+                between counselors, unit heads, and program directors.
+              </p>
+            </div>
+
+            {/* Feature 4 */}
+            <div style={{ 
+              background: 'rgba(255,255,255,0.1)', 
+              padding: '32px', 
+              borderRadius: '16px',
+              border: '1px solid rgba(255,255,255,0.2)',
+              backdropFilter: 'blur(10px)'
+            }}>
+              <div style={{ 
+                background: '#9C27B0', 
+                width: '60px', 
+                height: '60px', 
+                borderRadius: '50%', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                marginBottom: '24px',
+                fontSize: '24px'
+              }}>
+                🔄
+              </div>
+              <h3 style={{ fontSize: '1.5rem', marginBottom: '16px', fontWeight: '600' }}>
+                Dynamic Adaptation
+              </h3>
+              <p style={{ opacity: '0.9', lineHeight: '1.6' }}>
+                Automatically adjust schedules when cabins merge, campers arrive/depart, 
+                or weather conditions change.
+              </p>
+            </div>
+
+            {/* Feature 5 */}
+            <div style={{ 
+              background: 'rgba(255,255,255,0.1)', 
+              padding: '32px', 
+              borderRadius: '16px',
+              border: '1px solid rgba(255,255,255,0.2)',
+              backdropFilter: 'blur(10px)'
+            }}>
+              <div style={{ 
+                background: '#F44336', 
+                width: '60px', 
+                height: '60px', 
+                borderRadius: '50%', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                marginBottom: '24px',
+                fontSize: '24px'
+              }}>
+                📱
+              </div>
+              <h3 style={{ fontSize: '1.5rem', marginBottom: '16px', fontWeight: '600' }}>
+                Progressive Web App
+              </h3>
+              <p style={{ opacity: '0.9', lineHeight: '1.6' }}>
+                Works offline, installs on any device, and provides a native app experience 
+                for staff in remote camp locations.
+              </p>
+            </div>
+
+            {/* Feature 6 */}
+            <div style={{ 
+              background: 'rgba(255,255,255,0.1)', 
+              padding: '32px', 
+              borderRadius: '16px',
+              border: '1px solid rgba(255,255,255,0.2)',
+              backdropFilter: 'blur(10px)'
+            }}>
+              <div style={{ 
+                background: '#00BCD4', 
+                width: '60px', 
+                height: '60px', 
+                borderRadius: '50%', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                marginBottom: '24px',
+                fontSize: '24px'
+              }}>
+                🔗
+              </div>
+              <h3 style={{ fontSize: '1.5rem', marginBottom: '16px', fontWeight: '600' }}>
+                Seamless Integration
+              </h3>
+              <p style={{ opacity: '0.9', lineHeight: '1.6' }}>
+                Connect with existing camp management systems like CampMinder, CampDoc, 
+                and Campwise for unified data management.
+              </p>
+            </div>
+          </div>
         </div>
-      </main>
-      <footer style={{ textAlign: 'center', color: '#718096', fontSize: '0.95rem', padding: '24px 0 12px 0' }}>
-        &copy; {new Date().getFullYear()} Camp Greenwood
+      </div>
+
+      {/* CTA Section */}
+      <div style={{ 
+        textAlign: 'center',
+        padding: '80px 20px',
+        maxWidth: '1200px',
+        margin: '0 auto'
+      }}>
+        <h2 style={{ 
+          fontSize: '2.5rem', 
+          marginBottom: '24px',
+          fontWeight: '600'
+        }}>
+          Ready to Transform Your Camp?
+        </h2>
+        <p style={{ 
+        fontSize: '1.2rem',
+          marginBottom: '40px',
+          opacity: '0.9',
+          maxWidth: '600px',
+          marginLeft: 'auto',
+          marginRight: 'auto'
+        }}>
+          Join modern camps that are already using our platform to create better 
+          experiences for campers and staff.
+        </p>
+        <button style={{ 
+          background: '#4CAF50', 
+          color: 'white', 
+          border: 'none', 
+          borderRadius: '8px', 
+          padding: '20px 40px', 
+          fontSize: '20px', 
+          fontWeight: '600', 
+          cursor: 'pointer',
+          boxShadow: '0 4px 12px rgba(76,175,80,0.3)',
+          transition: 'all 0.3s ease'
+        }}>
+          Start Free Trial
+        </button>
+        </div>
+
+      {/* Footer */}
+      <footer style={{ 
+        textAlign: 'center', 
+        padding: '40px 20px',
+        borderTop: '1px solid rgba(255,255,255,0.2)',
+        marginTop: '60px'
+      }}>
+        <p style={{ opacity: '0.7', marginBottom: '16px' }}>
+          © 2025 Camp Management App. All rights reserved.
+        </p>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap' }}>
+          <a href="#" style={{ color: 'white', opacity: '0.7', textDecoration: 'none' }}>Privacy Policy</a>
+          <a href="#" style={{ color: 'white', opacity: '0.7', textDecoration: 'none' }}>Terms of Service</a>
+          <a href="#" style={{ color: 'white', opacity: '0.7', textDecoration: 'none' }}>Support</a>
+          <a href="#" style={{ color: 'white', opacity: '0.7', textDecoration: 'none' }}>Contact</a>
+        </div>
       </footer>
     </div>
   );

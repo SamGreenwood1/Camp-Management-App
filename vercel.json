@@ -1,0 +1,29 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "public-site/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "public-site/dist"
+      }
+    },
+    {
+      "src": "user-app/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "user-app/dist"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/app/(.*)",
+      "dest": "/user-app/index.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public-site/index.html"
+    }
+  ]
+}
