@@ -1,52 +1,34 @@
 [
   {
-    "cabin_id": "cabin-e",
+    "cabin_id": "cabin-a",
+    "area_id": "area-ropes",
+    "period_id": "p1",
+    "day": 1,
+    "is_manual_override": false,
+    "is_choice_period": false,
+    "is_double_booked": false
+  },
+  {
+    "cabin_id": "cabin-b",
+    "area_id": "area-ropes",
+    "period_id": "p1",
+    "day": 1,
+    "is_manual_override": false,
+    "is_choice_period": false,
+    "is_double_booked": false
+  },
+  {
+    "cabin_id": "cabin-d",
     "area_id": "area-field",
     "period_id": "p1",
     "day": 1,
-    "is_manual_override": true,
-    "is_choice_period": false,
-    "is_double_booked": false
-  },
-  {
-    "cabin_id": "cabin-a",
-    "area_id": "area-waterfront",
-    "period_id": "p3",
-    "day": 1,
-    "is_manual_override": false,
-    "is_choice_period": true,
-    "is_double_booked": false
-  },
-  {
-    "cabin_id": "cabin-a",
-    "area_id": "area-ropes",
-    "period_id": "p1",
-    "day": 1,
-    "is_manual_override": false,
-    "is_choice_period": false,
-    "is_double_booked": false
-  },
-  {
-    "cabin_id": "cabin-b",
-    "area_id": "area-ropes",
-    "period_id": "p1",
-    "day": 1,
-    "is_manual_override": false,
-    "is_choice_period": false,
-    "is_double_booked": false
-  },
-  {
-    "cabin_id": "cabin-d",
-    "area_id": "area-waterfront",
-    "period_id": "p1",
-    "day": 1,
     "is_manual_override": false,
     "is_choice_period": false,
     "is_double_booked": false
   },
   {
     "cabin_id": "cabin-c",
-    "area_id": "area-waterfront",
+    "area_id": "area-field",
     "period_id": "p1",
     "day": 1,
     "is_manual_override": false,
@@ -64,7 +46,7 @@
   },
   {
     "cabin_id": "cabin-b",
-    "area_id": "area-waterfront",
+    "area_id": "area-ropes",
     "period_id": "p2",
     "day": 1,
     "is_manual_override": false,
@@ -73,7 +55,7 @@
   },
   {
     "cabin_id": "cabin-d",
-    "area_id": "area-art",
+    "area_id": "area-ropes",
     "period_id": "p2",
     "day": 1,
     "is_manual_override": false,
@@ -82,16 +64,7 @@
   },
   {
     "cabin_id": "cabin-c",
-    "area_id": "area-art",
-    "period_id": "p2",
-    "day": 1,
-    "is_manual_override": false,
-    "is_choice_period": false,
-    "is_double_booked": false
-  },
-  {
-    "cabin_id": "cabin-e",
-    "area_id": "area-waterfront",
+    "area_id": "area-ropes",
     "period_id": "p2",
     "day": 1,
     "is_manual_override": false,
@@ -109,7 +82,7 @@
   },
   {
     "cabin_id": "cabin-d",
-    "area_id": "area-waterfront",
+    "area_id": "area-field",
     "period_id": "p3",
     "day": 1,
     "is_manual_override": false,
@@ -118,16 +91,7 @@
   },
   {
     "cabin_id": "cabin-c",
-    "area_id": "area-waterfront",
-    "period_id": "p3",
-    "day": 1,
-    "is_manual_override": false,
-    "is_choice_period": false,
-    "is_double_booked": false
-  },
-  {
-    "cabin_id": "cabin-e",
-    "area_id": "area-ropes",
+    "area_id": "area-field",
     "period_id": "p3",
     "day": 1,
     "is_manual_override": false,
@@ -171,17 +135,8 @@
     "is_double_booked": false
   },
   {
-    "cabin_id": "cabin-e",
-    "area_id": "area-art",
-    "period_id": "p1",
-    "day": 2,
-    "is_manual_override": false,
-    "is_choice_period": false,
-    "is_double_booked": false
-  },
-  {
     "cabin_id": "cabin-a",
-    "area_id": "area-art",
+    "area_id": "area-archery",
     "period_id": "p2",
     "day": 2,
     "is_manual_override": false,
@@ -190,7 +145,7 @@
   },
   {
     "cabin_id": "cabin-b",
-    "area_id": "area-wall",
+    "area_id": "area-archery",
     "period_id": "p2",
     "day": 2,
     "is_manual_override": false,
@@ -199,7 +154,7 @@
   },
   {
     "cabin_id": "cabin-d",
-    "area_id": "area-wall",
+    "area_id": "area-archery",
     "period_id": "p2",
     "day": 2,
     "is_manual_override": false,
@@ -208,15 +163,6 @@
   },
   {
     "cabin_id": "cabin-c",
-    "area_id": "area-wall",
-    "period_id": "p2",
-    "day": 2,
-    "is_manual_override": false,
-    "is_choice_period": false,
-    "is_double_booked": false
-  },
-  {
-    "cabin_id": "cabin-e",
     "area_id": "area-archery",
     "period_id": "p2",
     "day": 2,
@@ -245,15 +191,6 @@
   {
     "cabin_id": "cabin-c",
     "area_id": "area-archery",
-    "period_id": "p3",
-    "day": 2,
-    "is_manual_override": false,
-    "is_choice_period": false,
-    "is_double_booked": false
-  },
-  {
-    "cabin_id": "cabin-e",
-    "area_id": "area-art",
     "period_id": "p3",
     "day": 2,
     "is_manual_override": false,

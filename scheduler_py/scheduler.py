@@ -31,9 +31,11 @@ class CampScheduler:
 
         try:
             processed_cabins = apply_cabin_merging(self.config.get("cabins", []), self.config)
+            self.config["cabins"] = processed_cabins
+
             self.process_manual_overrides()
             self.process_choice_periods()
-            self.run_scheduling_loop(processed_cabins)
+            self.run_scheduling_loop(self.config.get("cabins", []))
             self.validate_final_schedule()
 
             self.scheduling_stats["end_time"] = time.time()
@@ -57,34 +59,60 @@ class CampScheduler:
             }
 
     def process_manual_overrides(self):
-        """Process manual overrides from configuration."""
+        """Process manual overrides from configuration, respecting filtered data."""
         manual_overrides = self.config.get("manualOverrides", [])
+        processed_count = 0
+
+        allowed_cabin_ids = {c.id for c in self.config.get("cabins", [])}
+        allowed_area_ids = {a.id for a in self.config.get("areas", [])}
+
         for override in manual_overrides:
-            assignment = Assignment(
-                cabin_id=override["cabinId"],
-                area_id=override["areaId"],
-                period_id=override["periodId"],
-                day=override["day"],
-                is_manual_override=True,
-            )
-            self.assignments.append(assignment)
-            self.update_scheduling_state(assignment)
-        print(f"Processed {len(manual_overrides)} manual overrides")
+            cabin_id = override["cabinId"]
+            area_id = override["areaId"]
+
+            if cabin_id in allowed_cabin_ids and area_id in allowed_area_ids:
+                assignment = Assignment(
+                    cabin_id=cabin_id,
+                    area_id=area_id,
+                    period_id=override["periodId"],
+                    day=override["day"],
+                    is_manual_override=True,
+                )
+                self.assignments.append(assignment)
+                self.update_scheduling_state(assignment)
+                processed_count += 1
+            else:
+                print(f"Warning: Skipping manual override for cabin '{cabin_id}' or area '{area_id}' as it's not in the filtered dataset.")
+
+        print(f"Processed {processed_count} manual overrides")
 
     def process_choice_periods(self):
-        """Process choice periods from configuration."""
+        """Process choice periods from configuration, respecting filtered data."""
         choice_periods = self.config.get("choicePeriods", [])
+        processed_count = 0
+
+        allowed_cabin_ids = {c.id for c in self.config.get("cabins", [])}
+        allowed_area_ids = {a.id for a in self.config.get("areas", [])}
+
         for choice in choice_periods:
-            assignment = Assignment(
-                cabin_id=choice["cabinId"],
-                area_id=choice["areaId"],
-                period_id=choice["periodId"],
-                day=choice["day"],
-                is_choice_period=True,
-            )
-            self.assignments.append(assignment)
-            self.update_scheduling_state(assignment)
-        print(f"Processed {len(choice_periods)} choice periods")
+            cabin_id = choice["cabinId"]
+            area_id = choice["areaId"]
+
+            if cabin_id in allowed_cabin_ids and area_id in allowed_area_ids:
+                assignment = Assignment(
+                    cabin_id=cabin_id,
+                    area_id=area_id,
+                    period_id=choice["periodId"],
+                    day=choice["day"],
+                    is_choice_period=True,
+                )
+                self.assignments.append(assignment)
+                self.update_scheduling_state(assignment)
+                processed_count += 1
+            else:
+                print(f"Warning: Skipping choice period for cabin '{cabin_id}' or area '{area_id}' as it's not in the filtered dataset.")
+
+        print(f"Processed {processed_count} choice periods")
 
     def run_scheduling_loop(self, cabins: List[Cabin]):
         """Main scheduling loop - assigns cabins to areas for each period."""
