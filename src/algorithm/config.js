@@ -1,3 +1,6 @@
+import { parseUnits, parseActivityAreas } from './envConfig.js';
+import { generateCabinName } from './cabinNameGenerator.js';
+
 /**
  * Configuration file for the camp scheduling algorithm
  * Contains all periods, areas, cabins, and scheduler settings
@@ -9,11 +12,10 @@
 export const config = {
   // Environment variable integration
   useEnvVars: false, // Default to false, can be overridden by process.env
-  
+
   // Core scheduling parameters
   noRepeatsDays: 3, // Number of days before a cabin can repeat an area
-  allowedTransitionTime: 30, // Maximum travel time between consecutive areas (minutes)
-  
+
   // Periods configuration
   periods: [
     {
@@ -397,7 +399,7 @@ export const config = {
 
   // Cabin merging model configuration
   cabinMergingModel: 'none', // Options: 'none', 'sessionSpecific', 'mutableIdentity', 'hierarchical'
-  
+
   // Merge instructions for cabin merging
   mergeInstructions: [
     // Example merge instruction (not used with 'none' model)
@@ -451,18 +453,58 @@ export function applyEnvironmentOverrides(config) {
     const noRepeatsDays = parseInt(process.env.NO_REPEATS_DAYS, 10);
     if (!isNaN(noRepeatsDays)) {
       overriddenConfig.noRepeatsDays = noRepeatsDays;
-      console.log(`Environment override: NO_REPEATS_DAYS = ${noRepeatsDays}`);
     }
   }
 
-  // Override allowedTransitionTime if environment variable is set
-  if (process.env.ALLOWED_TRANSITION_TIME) {
-    const allowedTransitionTime = parseInt(process.env.ALLOWED_TRANSITION_TIME, 10);
-    if (!isNaN(allowedTransitionTime)) {
-      overriddenConfig.allowedTransitionTime = allowedTransitionTime;
-      console.log(`Environment override: ALLOWED_TRANSITION_TIME = ${allowedTransitionTime}`);
+
+  // Override units if environment variable is set
+  if (process.env.UNITS) {
+    const units = parseUnits(process.env.UNITS);
+    if (units.length > 0) {
+      const unitMap = {};
+      const unitIds = [...new Set(config.cabins.map(c => c.unit))].sort();
+      unitIds.forEach((id, index) => {
+        unitMap[id] = units[index] || `Unit ${id}`;
+      });
+      overriddenConfig.units = unitMap;
     }
   }
+
+  // Override activity areas if environment variable is set
+  if (process.env.ACTIVITY_AREAS) {
+    const activityAreas = parseActivityAreas(process.env.ACTIVITY_AREAS);
+    if (activityAreas.length > 0) {
+      const newAreas = [];
+      const originalAreas = config.areas;
+      activityAreas.forEach(([department, areaNames]) => {
+        areaNames.forEach(areaName => {
+          const area = originalAreas.find(a => a.id === areaName || a.name === areaName);
+          if (area) {
+            newAreas.push({ ...area, department });
+          } else {
+            console.warn(`Area "${areaName}" from environment not found in config.`);
+          }
+        });
+      });
+      overriddenConfig.areas = newAreas;
+    }
+  }
+
+  // Override cabin names if environment variable is set
+  if (process.env.CABIN_NAMING_STRATEGY) {
+    const strategy = process.env.CABIN_NAMING_STRATEGY;
+    const template = process.env.CABIN_NAMING_TEMPLATE || '';
+    if (overriddenConfig.units) {
+      overriddenConfig.cabins = overriddenConfig.cabins.map(cabin => {
+        const unitName = overriddenConfig.units[cabin.unit] || cabin.unit;
+        return {
+          ...cabin,
+          name: generateCabinName(strategy, cabin, unitName, template),
+        };
+      });
+    }
+  }
+
 
   return overriddenConfig;
 }

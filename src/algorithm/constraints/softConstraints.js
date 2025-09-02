@@ -3,9 +3,8 @@
  * These functions implement the "Conditionals" (soft rules) for ranking candidate areas
  */
 
-import { 
-  getLastCabinArea, 
-  calculateTravelTime,
+import {
+  getLastCabinArea,
   getAreaUtilization,
   hasCabinUsedAreaRecently
 } from './utilities.js';
@@ -55,9 +54,6 @@ function calculateAreaScore(area, cabin, period, assignments, config) {
   // Preference scoring
   score += calculatePreferenceScore(area, cabin);
 
-  // Travel time optimization
-  score += calculateTravelTimeScore(area, cabin, period, assignments, config);
-
   // Area utilization goals
   score += calculateUtilizationGoalScore(area, period, assignments, config);
 
@@ -77,7 +73,7 @@ function calculateAreaScore(area, cabin, period, assignments, config) {
 function calculateAgeGroupPriorityScore(area, cabin, config) {
   if (!config.ageGroupPriorities) return 0;
 
-  const priority = config.ageGroupPriorities.find(p => 
+  const priority = config.ageGroupPriorities.find(p =>
     p.ageGroup === cabin.ageGroup && p.areaId === area.id
   );
 
@@ -102,7 +98,7 @@ function calculateAreaVarietyScore(area, cabin, period, assignments, config) {
 
   // Get cabin's recent area history
   const cabinAssignments = assignments.filter(a => a.cabinId === cabin.id);
-  const recentAssignments = cabinAssignments.filter(a => 
+  const recentAssignments = cabinAssignments.filter(a =>
     a.day >= period.day - 2 && a.day <= period.day
   );
 
@@ -117,8 +113,8 @@ function calculateAreaVarietyScore(area, cabin, period, assignments, config) {
 
   // Bonus for variety
   const usedCategories = new Set(recentAssignments.map(a => {
-    const a = config.areas.find(area => area.id === a.areaId);
-    return a ? a.category : null;
+    const areaObj = config.areas.find(area => area.id === a.areaId);
+    return areaObj ? areaObj.category : null;
   }).filter(Boolean));
 
   if (!usedCategories.has(area.category)) {
@@ -143,13 +139,13 @@ function calculateSocialGroupingScore(area, cabin, period, assignments, config) 
   }
 
   let score = 0;
-  const currentPeriodAssignments = assignments.filter(a => 
+  const currentPeriodAssignments = assignments.filter(a =>
     a.day === period.day && a.periodId === period.id
   );
 
   // Check if social group cabins are assigned to this area
   for (const socialGroupId of cabin.socialGroups) {
-    const socialCabinAssignment = currentPeriodAssignments.find(a => 
+    const socialCabinAssignment = currentPeriodAssignments.find(a =>
       a.cabinId === socialGroupId && a.areaId === area.id
     );
 
@@ -172,45 +168,19 @@ function calculatePreferenceScore(area, cabin) {
 
   if (cabin.preferences) {
     // Favorite areas bonus
-    if (cabin.preferences.favoriteAreas && 
+    if (cabin.preferences.favoriteAreas &&
         cabin.preferences.favoriteAreas.includes(area.id)) {
       score += 30;
     }
 
     // Avoid areas penalty
-    if (cabin.preferences.avoidAreas && 
+    if (cabin.preferences.avoidAreas &&
         cabin.preferences.avoidAreas.includes(area.id)) {
       score -= 50;
     }
   }
 
   return score;
-}
-
-/**
- * Calculate score based on travel time optimization
- * @param {Object} area - Activity area
- * @param {Object} cabin - Cabin object
- * @param {Object} period - Period object
- * @param {Array} assignments - Current assignments
- * @param {Object} config - Configuration object
- * @returns {number} Score adjustment
- */
-function calculateTravelTimeScore(area, cabin, period, assignments, config) {
-  const lastAreaId = getLastCabinArea(cabin.id, assignments, period.day, period.id);
-  if (!lastAreaId) return 0;
-
-  const lastArea = config.areas.find(a => a.id === lastAreaId);
-  if (!lastArea) return 0;
-
-  const travelTime = calculateTravelTime(lastArea, area);
-  const maxAllowedTime = config.allowedTransitionTime || 30;
-
-  if (travelTime <= maxAllowedTime) {
-    return 10; // Bonus for reasonable travel time
-  } else {
-    return -15; // Penalty for excessive travel time
-  }
 }
 
 /**
@@ -264,7 +234,7 @@ export function getCabinMergeInstructions(cabin, config) {
     return null;
   }
 
-  return config.mergeInstructions.find(instruction => 
+  return config.mergeInstructions.find(instruction =>
     instruction.cabinId === cabin.id
   );
 }
