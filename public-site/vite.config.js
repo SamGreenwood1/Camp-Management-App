@@ -1,0 +1,23 @@
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    extensions: ['.js', '.ts', '.jsx', '.tsx']
+  },
+  build: {
+    target: 'esnext',
+    modulePreload: false,
+    outDir: 'dist',
+    rollupOptions: {
+      input: 'index.html'
+    }
+  },
+  server: {
+    port: 3001,
+    open: true
+  },
+  root: '.',
+  publicDir: '../public'
+});

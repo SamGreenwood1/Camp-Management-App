@@ -2,10 +2,8 @@
 
 ![Next.js](https://img.shields.io/badge/Next.js-Black?style=for-the-badge&logo=next.js&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
-![Supabase](https://img.shields.io/badge/Supabase-3FCF8E?style=for-the-badge&logo=supabase&logoColor=white)
-![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
-![TanStack Query](https://img.shields.io/badge/TanStack_Query-FF4154?style=for-the-badge&logo=reactquery&logoColor=white)
-![Clerk](https://img.shields.io/badge/Clerk-6C56F3?style=for-the-badge&logo=clerk&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
 
 A dynamic web application designed to streamline summer camp program management and daily activity scheduling. This app aims to provide a flexible and intelligent system for program directors, unit heads, and activity specialists to manage their camp's daily flow, ensuring a diverse and equitable experience for all campers.
 
@@ -16,10 +14,27 @@ This application addresses key challenges in summer camp logistics:
 3.  **Program Management**: Centralize all camp program details, supplies, and approval workflows.
 4.  **Staff Coordination**: Manage staff roles, assignments, and day-offs efficiently.
 
+## 📁 Project Structure
+
+```
+Camp-Management-App/
+├── public-site/                # Public landing page
+├── user-app/                   # Core application (dashboard)
+├── src/                       # Shared source code
+│   ├── components/            # React components
+│   ├── hooks/                 # Custom React hooks
+│   ├── scheduling/            # Scheduling types and logic
+│   └── algorithm/             # Core scheduling algorithm
+├── README.md                  # This file
+├── PROJECT_OVERVIEW.md        # Detailed project overview
+├── MONOREPO_README.md         # Monorepo setup guide
+├── vercel.json                # Vercel deployment config
+└── package.json               # Root dependencies
+```
+
 For a comprehensive overview of the project's detailed features, modules, and architectural plans, please refer to the dedicated [`PROJECT_OVERVIEW.md`](./PROJECT_OVERVIEW.md) file.
 
 ## 🚀 Getting Started
-This guide will help you get the development server running.
 
 ### Prerequisites
 *   Node.js (LTS recommended)
@@ -31,49 +46,80 @@ This guide will help you get the development server running.
     git clone https://github.com/SamGreenwood1/Camp-Management-App.git
     cd Camp-Management-App
     ```
-2.  **Install project dependencies:**
+
+2.  **Install all dependencies:**
     ```bash
-    npm install
-    # or yarn
-    # yarn
+    npm run install:all
     ```
-### Running the Development Server
-1.  **Start the Next.js development server:**
+
+### Running the Development Servers
+1.  **Start both applications simultaneously:**
     ```bash
     npm run dev
-    # or yarn dev
     ```
-2.  **Open in your browser:**
-    Visit `http://localhost:3000` to see the application. The current setup is primarily focused on demonstrating and testing the core daily scheduling logic.
+    - Public site: http://localhost:3001
+    - User app: http://localhost:3002
 
-## ⚠️ Troubleshooting Installation & Setup
-If `npm run dev` fails, please check the following common issues:
-*   **"Missing script: 'dev'" error:**
-    *   Ensure your `package.json` file explicitly contains the Next.js development scripts. It should have a `"scripts"` section like this (your dependencies will vary but the scripts should be present):
-        ```json
-        {
-          "name": "camp-management-app",
-          "version": "1.0.0",
-          "private": true,
-          "scripts": {
-            "dev": "next dev",
-            "build": "next build",
-            "start": "next start",
-            "lint": "next lint"
-          },
-          "dependencies": { /* ... */ },
-          "devDependencies": { /* ... */ }
-        }
-        ```
-*   **"Module parse failed: 'import' and 'export' may appear only with 'sourceType: module'" error (pointing to `index.js`):**
-    *   This usually means an extraneous `src/index.js` file exists. Next.js projects don't typically use this as their main entry point. **Please ensure you delete or rename `src/index.js` if it exists.** The main entry point for this project's UI is `src/pages/index.tsx`.
-*   **Next.js Configuration Files:**
-    *   Ensure you have standard Next.js configuration files in your project root, if they were removed or not created by `create-next-app`:
-        *   `next.config.js` (for Next.js specific configurations)
-        *   `tsconfig.json` (for TypeScript settings)
-        *   `.eslintrc.json` (for ESLint, if using)
-        *   `tailwind.config.js` and `postcss.config.js` (if using Tailwind CSS)
-    *   For the App Router setup (if you initially chose `--app` with `create-next-app`), ensure `src/app/layout.tsx` and `src/app/page.tsx` exist, and that `src/app/page.tsx` includes `'use client';` at the very top as it uses client-side hooks. If you chose the Pages Router (`--no-app`), `src/pages/_app.tsx` and `src/pages/_document.tsx` are typically present alongside `src/pages/index.tsx`.
+2.  **Or start individually:**
+    ```bash
+    npm run dev:public    # Public site only
+    npm run dev:app       # User app only
+    ```
+
+## 🏗️ Building for Production
+
+```bash
+# Build both applications
+npm run build
+
+# Or build individually
+npm run build:public
+npm run build:app
+```
+
+## 🚀 Deployment
+
+### Vercel (Recommended)
+```bash
+vercel
+```
+
+The `vercel.json` configuration automatically handles routing:
+- `/app/*` → User application
+- `/*` → Public landing page
+
+### Manual Deployment
+Each application can be deployed separately:
+```bash
+cd public-site && npm run build
+cd user-app && npm run build
+```
+
+## 🔧 Development Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start both development servers |
+| `npm run dev:public` | Start public site only (port 3001) |
+| `npm run dev:app` | Start user app only (port 3002) |
+| `npm run build` | Build both applications |
+| `npm run preview` | Preview both built applications |
+| `npm run install:all` | Install dependencies for all apps |
+| `npm run clean` | Clean build artifacts |
+
+## 📱 Applications
+
+### Public Site (`/public-site`)
+- Marketing landing page
+- Feature showcase
+- Call-to-action for potential customers
+- SEO optimized
+
+### User App (`/user-app`)
+- Core camp management functionality
+- Intelligent scheduling algorithm
+- Program management system
+- Staff coordination tools
 
 ## 🤝 Contributing & Seeking Help
 
@@ -82,8 +128,6 @@ This project is actively under development, and I warmly invite contributions an
 The current application's functionality has largely been developed through an intuitive, "vibe-coding" approach. While I possess a strong understanding of the existing codebase and have actively participated in its creation by integrating, adapting, and refining its components (not merely copying code), initiating entirely new features or implementing novel architectural patterns from a blank slate remains a significant challenge.
 
 If you're looking to contribute, providing concrete code examples, specific design patterns, or structured implementation steps would be particularly valuable. Please feel free to open issues or submit pull requests. Your expertise in advancing this application is highly valued and immensely appreciated.
-
-Please feel free to open issues on this repository or submit pull requests. Your help in refining this application and guiding its development is immensely appreciated!
 
 ## 📄 License
 This project is currently licensed under the **MIT License**.

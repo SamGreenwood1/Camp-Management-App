@@ -2,11 +2,12 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
-  server: {
-    host: true,
-    port: 3000,
-    strictPort: true
-  }
-})
-
   plugins: [react()],
+  resolve: {
+    extensions: ['.js', '.ts', '.jsx', '.tsx']
+  },
+  build: {
+    target: 'esnext',
+    modulePreload: false
+  }
+});
