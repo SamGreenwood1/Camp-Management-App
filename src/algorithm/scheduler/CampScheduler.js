@@ -6,7 +6,6 @@
 import { checkHardConstraints, isDoubleBookingAllowed, isAreaAlternatingDays } from '../constraints/hardConstraints.js';
 import { rankCandidateAreas, getCabinMergeInstructions, applyCabinMerging } from '../constraints/softConstraints.js';
 import { getCandidateAreas, getAreaUtilization } from '../constraints/utilities.js';
-import { deriveCabinName } from '../utils/cabinNameGenerator.js';
 
 /**
  * Main scheduler class for camp activity assignments
@@ -29,7 +28,6 @@ export class CampScheduler {
       startTime: null,
       endTime: null
     };
-    this.flatAreas = this.config.areas.map(dept => dept[1]).flat();
   }
 
   /**
@@ -42,41 +40,35 @@ export class CampScheduler {
 
     try {
       // Apply cabin merging if configured
-      let processedCabins = applyCabinMerging(this.config.cabins, this.config);
-
-      // Derive cabin names
-      this.config.cabins = processedCabins.map(cabin => ({
-        ...cabin,
-        name: deriveCabinName(cabin, this.config.cabinNameTemplate)
-      }));
-
+      const processedCabins = applyCabinMerging(this.config.cabins, this.config);
+      
       // Process manual overrides first
       this.processManualOverrides();
-
+      
       // Process choice periods
       this.processChoicePeriods();
-
+      
       // Main scheduling loop
-      await this.runSchedulingLoop(this.config.cabins);
-
+      await this.runSchedulingLoop(processedCabins);
+      
       // Final validation and cleanup
       this.validateFinalSchedule();
-
+      
       this.schedulingStats.endTime = new Date();
       this.schedulingStats.totalAssignments = this.assignments.length;
-
+      
       console.log(`Scheduling completed. Total assignments: ${this.assignments.length}`);
-
+      
       return {
         assignments: this.assignments,
         statistics: this.schedulingStats,
         success: true
       };
-
+      
     } catch (error) {
       console.error('Scheduling failed:', error);
       this.schedulingStats.endTime = new Date();
-
+      
       return {
         assignments: this.assignments,
         statistics: this.schedulingStats,
@@ -139,10 +131,10 @@ export class CampScheduler {
   async runSchedulingLoop(cabins) {
     // Sort periods by day and time for chronological processing
     const sortedPeriods = this.sortPeriodsChronologically();
-
+    
     for (const period of sortedPeriods) {
       console.log(`Scheduling period: ${period.name} (Day ${period.day})`);
-
+      
       // Skip if this period is already fully assigned
       if (this.isPeriodFullyAssigned(period)) {
         console.log(`Period ${period.name} already fully assigned, skipping`);
@@ -151,19 +143,18 @@ export class CampScheduler {
 
       // Get available cabins for this period
       const availableCabins = this.getAvailableCabinsForPeriod(cabins, period);
-
+      
       // Sort cabins by priority for fair assignment
       const prioritizedCabins = this.sortCabinsByPriority(availableCabins);
-
+      
       // Assign each available cabin to an area
       for (const cabin of prioritizedCabins) {
         const assignment = await this.assignCabinToArea(cabin, period);
-
+        
         if (assignment) {
           this.assignments.push(assignment);
           this.updateSchedulingState(assignment);
-          const area = this.flatAreas.find(a => a.id === assignment.areaId);
-          console.log(`Assigned ${cabin.name} to ${area ? area.name : assignment.areaId} for ${period.name}`);
+          console.log(`Assigned ${cabin.name} to ${assignment.areaId} for ${period.name}`);
         } else {
           this.schedulingStats.failedAssignments++;
           console.warn(`Failed to assign ${cabin.name} for ${period.name}`);
@@ -189,9 +180,10 @@ export class CampScheduler {
    * @returns {boolean} True if period is fully assigned
    */
   isPeriodFullyAssigned(period) {
-    const assignedCabins = this.assignments.filter(a =>
+    const assignedCabins = this.assignments.filter(a => 
       a.day === period.day && a.periodId === period.id
     ).length;
+    
     return assignedCabins >= this.config.cabins.length;
   }
 
@@ -204,9 +196,9 @@ export class CampScheduler {
   getAvailableCabinsForPeriod(cabins, period) {
     return cabins.filter(cabin => {
       // Check if cabin is already assigned during this period
-      const isAssigned = this.assignments.some(a =>
-        a.cabinId === cabin.id &&
-        a.day === period.day &&
+      const isAssigned = this.assignments.some(a => 
+        a.cabinId === cabin.id && 
+        a.day === period.day && 
         a.periodId === period.id
       );
 
@@ -225,10 +217,10 @@ export class CampScheduler {
    */
   isCabinBlackedOut(cabin, period) {
     if (!this.config.blackoutPeriods) return false;
-
-    return this.config.blackoutPeriods.some(blackout =>
-      blackout.cabinId === cabin.id &&
-      blackout.periodId === period.id &&
+    
+    return this.config.blackoutPeriods.some(blackout => 
+      blackout.cabinId === cabin.id && 
+      blackout.periodId === period.id && 
       blackout.day === period.day
     );
   }
@@ -243,7 +235,7 @@ export class CampScheduler {
       // Higher priority first
       const priorityDiff = (b.priority || 0) - (a.priority || 0);
       if (priorityDiff !== 0) return priorityDiff;
-
+      
       // Then by size (smaller cabins first for flexibility)
       return a.size - b.size;
     });
@@ -257,8 +249,8 @@ export class CampScheduler {
    */
   async assignCabinToArea(cabin, period) {
     // Get candidate areas for this cabin and period
-    let candidateAreas = getCandidateAreas(cabin, this.flatAreas, this.config.periods, period.day, period.id);
-
+    let candidateAreas = getCandidateAreas(cabin, this.config.areas, this.config.periods, period.day, period.id);
+    
     if (candidateAreas.length === 0) {
       console.warn(`No candidate areas available for ${cabin.name} during ${period.name}`);
       return null;
@@ -277,8 +269,8 @@ export class CampScheduler {
     }
 
     // Rank candidate areas by soft constraints
-    const rankedAreas = rankCandidateAreas(candidateAreas, cabin, period, this.assignments, this.config, this.flatAreas);
-
+    const rankedAreas = rankCandidateAreas(candidateAreas, cabin, period, this.assignments, this.config);
+    
     // Try to assign to the best area
     for (const area of rankedAreas) {
       if (this.canAssignCabinToArea(cabin, area, period)) {
@@ -324,7 +316,7 @@ export class CampScheduler {
   canAssignCabinToArea(cabin, area, period, allowDoubleBooking = false) {
     // Check if area is at capacity
     const currentUtilization = getAreaUtilization(area.id, this.assignments, period.day, period.id);
-
+    
     if (allowDoubleBooking) {
       // For double booking, check if it's within reasonable limits
       return currentUtilization < area.maxCapacity * 1.5; // Allow 50% overage
@@ -361,17 +353,17 @@ export class CampScheduler {
    */
   validateFinalSchedule() {
     console.log('Validating final schedule...');
-
+    
     let violations = 0;
-
+    
     // Check for double assignments
     for (const assignment of this.assignments) {
-      const duplicates = this.assignments.filter(a =>
-        a.cabinId === assignment.cabinId &&
-        a.day === assignment.day &&
+      const duplicates = this.assignments.filter(a => 
+        a.cabinId === assignment.cabinId && 
+        a.day === assignment.day && 
         a.periodId === assignment.periodId
       );
-
+      
       if (duplicates.length > 1) {
         console.error(`Double assignment detected for cabin ${assignment.cabinId} on day ${assignment.day}, period ${assignment.periodId}`);
         violations++;
@@ -379,7 +371,7 @@ export class CampScheduler {
     }
 
     // Check area capacity violations
-    for (const area of this.flatAreas) {
+    for (const area of this.config.areas) {
       for (const period of this.config.periods) {
         const utilization = getAreaUtilization(area.id, this.assignments, period.day, period.id);
         if (utilization > area.maxCapacity) {
@@ -403,11 +395,11 @@ export class CampScheduler {
   getStatistics() {
     return {
       ...this.schedulingStats,
-      duration: this.schedulingStats.endTime && this.schedulingStats.startTime
-        ? this.schedulingStats.endTime - this.schedulingStats.startTime
+      duration: this.schedulingStats.endTime && this.schedulingStats.startTime 
+        ? this.schedulingStats.endTime - this.schedulingStats.startTime 
         : null,
-      successRate: this.schedulingStats.totalAssignments > 0
-        ? (this.schedulingStats.totalAssignments - this.schedulingStats.failedAssignments) / this.schedulingStats.totalAssignments
+      successRate: this.schedulingStats.totalAssignments > 0 
+        ? (this.schedulingStats.totalAssignments - this.schedulingStats.failedAssignments) / this.schedulingStats.totalAssignments 
         : 0
     };
   }
@@ -436,19 +428,14 @@ export class CampScheduler {
    */
   exportToCSV() {
     const headers = ['Day', 'Period', 'Cabin', 'Area', 'Type'];
-    const rows = this.assignments.map(a => {
-      const cabin = this.config.cabins.find(c => c.id === a.cabinId);
-      const area = this.flatAreas.find(ar => ar.id === a.areaId);
-      const period = this.config.periods.find(p => p.id === a.periodId && p.day === a.day);
-      return [
-        a.day,
-        period ? period.name : a.periodId,
-        cabin ? cabin.name : a.cabinId,
-        area ? area.name : a.areaId,
-        a.isManualOverride ? 'Manual' : a.isChoicePeriod ? 'Choice' : 'Auto'
-      ];
-    });
-
+    const rows = this.assignments.map(a => [
+      a.day,
+      a.periodId,
+      a.cabinId,
+      a.areaId,
+      a.isManualOverride ? 'Manual' : a.isChoicePeriod ? 'Choice' : 'Auto'
+    ]);
+    
     return [headers, ...rows]
       .map(row => row.map(cell => `"${cell}"`).join(','))
       .join('\n');
@@ -459,19 +446,15 @@ export class CampScheduler {
    * @returns {string} HTML string
    */
   exportToHTML() {
-    const tableRows = this.assignments.map(a => {
-      const cabin = this.config.cabins.find(c => c.id === a.cabinId);
-      const area = this.flatAreas.find(ar => ar.id === a.areaId);
-      const period = this.config.periods.find(p => p.id === a.periodId && p.day === a.day);
-      return `
+    const tableRows = this.assignments.map(a => `
       <tr>
         <td>${a.day}</td>
-        <td>${period ? period.name : a.periodId}</td>
-        <td>${cabin ? cabin.name : a.cabinId}</td>
-        <td>${area ? area.name : a.areaId}</td>
+        <td>${a.periodId}</td>
+        <td>${a.cabinId}</td>
+        <td>${a.areaId}</td>
         <td>${a.isManualOverride ? 'Manual' : a.isChoicePeriod ? 'Choice' : 'Auto'}</td>
       </tr>
-    `}).join('');
+    `).join('');
 
     return `
       <html>
