@@ -44,18 +44,6 @@ export function arePeriodsConsecutive(period1, period2) {
 }
 
 /**
- * Calculate travel time between two areas
- * @param {Object} area1 - First activity area
- * @param {Object} area2 - Second activity area
- * @returns {number} Travel time in minutes
- */
-export function calculateTravelTime(area1, area2) {
-  // Simple distance calculation - could be enhanced with actual coordinates
-  const baseTravelTime = Math.abs(area1.travelTime - area2.travelTime);
-  return Math.max(baseTravelTime, 5); // Minimum 5 minutes
-}
-
-/**
  * Get the last area a cabin was assigned to
  * @param {string} cabinId - Cabin ID
  * @param {Array} assignments - Current assignments
@@ -65,21 +53,21 @@ export function calculateTravelTime(area1, area2) {
  */
 export function getLastCabinArea(cabinId, assignments, currentDay, currentPeriod) {
   const cabinAssignments = assignments.filter(a => a.cabinId === cabinId);
-  
+
   // Find the most recent assignment before current period
   let lastAssignment = null;
   for (const assignment of cabinAssignments) {
-    if (assignment.day < currentDay || 
+    if (assignment.day < currentDay ||
         (assignment.day === currentDay && assignment.periodId !== currentPeriod)) {
-      if (!lastAssignment || 
+      if (!lastAssignment ||
           assignment.day > lastAssignment.day ||
-          (assignment.day === lastAssignment.day && 
+          (assignment.day === lastAssignment.day &&
            assignment.periodId !== currentPeriod)) {
         lastAssignment = assignment;
       }
     }
   }
-  
+
   return lastAssignment ? lastAssignment.areaId : null;
 }
 
@@ -93,9 +81,9 @@ export function getLastCabinArea(cabinId, assignments, currentDay, currentPeriod
  */
 export function hasCabinUsedAreaRecently(cabinId, areaId, assignments, days) {
   const cutoffDay = Math.max(1, days);
-  const recentAssignments = assignments.filter(a => 
-    a.cabinId === cabinId && 
-    a.areaId === areaId && 
+  const recentAssignments = assignments.filter(a =>
+    a.cabinId === cabinId &&
+    a.areaId === areaId &&
     a.day >= cutoffDay
   );
   return recentAssignments.length > 0;
@@ -110,9 +98,9 @@ export function hasCabinUsedAreaRecently(cabinId, areaId, assignments, days) {
  * @returns {number} Current number of cabins assigned to the area
  */
 export function getAreaUtilization(areaId, assignments, day, periodId) {
-  return assignments.filter(a => 
-    a.areaId === areaId && 
-    a.day === day && 
+  return assignments.filter(a =>
+    a.areaId === areaId &&
+    a.day === day &&
     a.periodId === periodId
   ).length;
 }
@@ -128,18 +116,18 @@ export function getAreaUtilization(areaId, assignments, day, periodId) {
 export function isAreaAvailable(area, periods, day, periodId) {
   const period = periods.find(p => p.id === periodId && p.day === day);
   if (!period) return false;
-  
+
   // Check if area is in blackout areas for this period
   if (period.blackoutAreas && period.blackoutAreas.includes(area.id)) {
     return false;
   }
-  
+
   // Check if area alternates days
   if (area.alternatesDays) {
     const dayOffset = area.alternateDayOffset || 0;
     return (day + dayOffset) % 2 === 0;
   }
-  
+
   return true;
 }
 
@@ -153,31 +141,32 @@ export function isAreaAvailable(area, periods, day, periodId) {
  * @returns {Array} Array of available areas
  */
 export function getCandidateAreas(cabin, areas, periods, day, periodId) {
+  console.log('Areas in getCandidateAreas:', JSON.stringify(areas, null, 2));
   return areas.filter(area => {
     // Check basic availability
     if (!isAreaAvailable(area, periods, day, periodId)) {
       return false;
     }
-    
+
     // Check accessibility
     if (area.accessibility) {
-      if (area.accessibility.forbidden && 
+      if (area.accessibility.forbidden &&
           area.accessibility.forbidden.includes(cabin.ageGroup)) {
         return false;
       }
-      if (area.accessibility.allowed && 
+      if (area.accessibility.allowed &&
           !area.accessibility.allowed.includes(cabin.ageGroup)) {
         return false;
       }
     }
-    
+
     // Check cabin restrictions
-    if (cabin.restrictions && 
-        cabin.restrictions.blackoutAreas && 
+    if (cabin.restrictions &&
+        cabin.restrictions.blackoutAreas &&
         cabin.restrictions.blackoutAreas.includes(area.id)) {
       return false;
     }
-    
+
     return true;
   });
 }
