@@ -3,10 +3,9 @@
  * These functions implement the "Programmatic Rules" and hard aspects of "Conditionals"
  */
 
-import { 
-  getAreaUtilization, 
-  getLastCabinArea, 
-  calculateTravelTime,
+import {
+  getAreaUtilization,
+  getLastCabinArea,
   hasCabinUsedAreaRecently
 } from './utilities.js';
 
@@ -33,11 +32,6 @@ export function checkHardConstraints(cabin, area, period, assignments, config) {
   // Check area conflicts
   if (!checkAreaConflicts(area, period.day, period.id, assignments)) {
     return { isValid: false, reason: 'Area conflict detected' };
-  }
-
-  // Check travel time constraints
-  if (!checkTravelTimeConstraints(cabin, area, period.day, period.id, assignments, config)) {
-    return { isValid: false, reason: 'Excessive travel time between areas' };
   }
 
   // Check fixed area closures
@@ -77,9 +71,9 @@ export function checkHardConstraints(cabin, area, period, assignments, config) {
  * @returns {boolean} True if cabin is already assigned
  */
 function isCabinAlreadyAssigned(cabinId, day, periodId, assignments) {
-  return assignments.some(a => 
-    a.cabinId === cabinId && 
-    a.day === day && 
+  return assignments.some(a =>
+    a.cabinId === cabinId &&
+    a.day === day &&
     a.periodId === periodId
   );
 }
@@ -94,12 +88,12 @@ function isCabinAlreadyAssigned(cabinId, day, periodId, assignments) {
  */
 function checkAreaCapacity(area, day, periodId, assignments) {
   const currentUtilization = getAreaUtilization(area.id, assignments, day, periodId);
-  
+
   // Check max capacity
   if (currentUtilization >= area.maxCapacity) {
     return false;
   }
-  
+
   return true;
 }
 
@@ -128,34 +122,6 @@ function checkAreaConflicts(area, day, periodId, assignments) {
 }
 
 /**
- * Check travel time constraints between consecutive periods
- * @param {Object} cabin - Cabin object
- * @param {Object} area - Target activity area
- * @param {number} day - Day number
- * @param {string} periodId - Period ID
- * @param {Array} assignments - Current assignments
- * @param {Object} config - Configuration object
- * @returns {boolean} True if travel time is acceptable
- */
-function checkTravelTimeConstraints(cabin, area, day, periodId, assignments, config) {
-  const lastAreaId = getLastCabinArea(cabin.id, assignments, day, periodId);
-  if (!lastAreaId) {
-    return true; // No previous assignment to compare
-  }
-
-  // Find the last area object
-  const lastArea = config.areas.find(a => a.id === lastAreaId);
-  if (!lastArea) {
-    return true;
-  }
-
-  const travelTime = calculateTravelTime(lastArea, area);
-  const maxAllowedTime = config.allowedTransitionTime || 30; // Default 30 minutes
-
-  return travelTime <= maxAllowedTime;
-}
-
-/**
  * Check if area is closed during the period
  * @param {Object} area - Activity area
  * @param {Object} period - Period object
@@ -181,7 +147,7 @@ function checkFixedAreaClosures(area, period) {
  */
 function checkNoRepeatsRule(cabinId, areaId, day, assignments, config) {
   const noRepeatsDays = config.noRepeatsDays || 3; // Default 3 days
-  
+
   return !hasCabinUsedAreaRecently(cabinId, areaId, assignments, noRepeatsDays);
 }
 
@@ -199,9 +165,9 @@ function checkBufferPeriods(area, day, periodId, assignments) {
   }
 
   // Check if area was used recently and needs buffer
-  const recentAssignments = assignments.filter(a => 
-    a.areaId === area.id && 
-    a.day === day && 
+  const recentAssignments = assignments.filter(a =>
+    a.areaId === area.id &&
+    a.day === day &&
     a.periodId !== periodId
   );
 
@@ -252,7 +218,7 @@ export function isDoubleBookingAllowed(area, cabinId, assignments, day, periodId
   }
 
   const { likelihood, scope } = area.doubleBooking;
-  
+
   if (likelihood === 'never') {
     return false;
   }

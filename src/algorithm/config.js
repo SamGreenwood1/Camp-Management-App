@@ -6,466 +6,109 @@
 /**
  * Main configuration object for the camp scheduler
  */
-export const config = {
-  // Environment variable integration
-  useEnvVars: false, // Default to false, can be overridden by process.env
-  
+export let config = {
   // Core scheduling parameters
   noRepeatsDays: 3, // Number of days before a cabin can repeat an area
-  allowedTransitionTime: 30, // Maximum travel time between consecutive areas (minutes)
-  
-  // Periods configuration
-  periods: [
-    {
-      id: 'morning',
-      name: 'Morning',
-      startTime: 900, // 9:00 AM
-      endTime: 1200,  // 12:00 PM
-      day: 1,
-      isChoicePeriod: false,
-      blackoutAreas: []
-    },
-    {
-      id: 'afternoon',
-      name: 'Afternoon',
-      startTime: 1300, // 1:00 PM
-      endTime: 1600,  // 4:00 PM
-      day: 1,
-      isChoicePeriod: false,
-      blackoutAreas: []
-    },
-    {
-      id: 'evening',
-      name: 'Evening',
-      startTime: 1900, // 7:00 PM
-      endTime: 2100,  // 9:00 PM
-      day: 1,
-      isChoicePeriod: false,
-      blackoutAreas: []
-    },
-    {
-      id: 'morning',
-      name: 'Morning',
-      startTime: 900,
-      endTime: 1200,
-      day: 2,
-      isChoicePeriod: false,
-      blackoutAreas: []
-    },
-    {
-      id: 'afternoon',
-      name: 'Afternoon',
-      startTime: 1300,
-      endTime: 1600,
-      day: 2,
-      isChoicePeriod: false,
-      blackoutAreas: []
-    },
-    {
-      id: 'evening',
-      name: 'Evening',
-      startTime: 1900,
-      endTime: 2100,
-      day: 2,
-      isChoicePeriod: false,
-      blackoutAreas: []
-    },
-    {
-      id: 'morning',
-      name: 'Morning',
-      startTime: 900,
-      endTime: 1200,
-      day: 3,
-      isChoicePeriod: false,
-      blackoutAreas: []
-    },
-    {
-      id: 'afternoon',
-      name: 'Afternoon',
-      startTime: 1300,
-      endTime: 1600,
-      day: 3,
-      isChoicePeriod: false,
-      blackoutAreas: []
-    },
-    {
-      id: 'evening',
-      name: 'Evening',
-      startTime: 1900,
-      endTime: 2100,
-      day: 3,
-      isChoicePeriod: false,
-      blackoutAreas: []
-    }
-  ],
 
-  // Activity areas configuration
-  areas: [
-    {
-      id: 'swimming',
-      name: 'Swimming Pool',
-      aliases: ['pool', 'aquatics'],
-      category: 'active',
-      maxCapacity: 2,
-      minCapacity: 1,
-      weatherSensitive: true,
-      linkedAreas: [],
-      bufferPeriods: 0,
-      accessibility: {
-        allowed: ['junior', 'senior'],
-        forbidden: ['toddler']
-      },
-      doubleBooking: {
-        likelihood: 'sometimes',
-        scope: 'anyUnit'
-      },
-      alternatesDays: false,
-      travelTime: 10
-    },
-    {
-      id: 'archery',
-      name: 'Archery Range',
-      aliases: ['shooting', 'target'],
-      category: 'active',
-      maxCapacity: 1,
-      minCapacity: 1,
-      weatherSensitive: true,
-      linkedAreas: [],
-      bufferPeriods: 1,
-      accessibility: {
-        allowed: ['senior'],
-        forbidden: ['toddler', 'junior']
-      },
-      doubleBooking: {
-        likelihood: 'never',
-        scope: 'sameUnit'
-      },
-      alternatesDays: false,
-      travelTime: 15
-    },
-    {
-      id: 'crafts',
-      name: 'Crafts Center',
-      aliases: ['arts', 'creative'],
-      category: 'creative',
-      maxCapacity: 3,
-      minCapacity: 1,
-      weatherSensitive: false,
-      linkedAreas: [],
-      bufferPeriods: 0,
-      accessibility: {
-        allowed: ['toddler', 'junior', 'senior'],
-        forbidden: []
-      },
-      doubleBooking: {
-        likelihood: 'always',
-        scope: 'anyUnit'
-      },
-      alternatesDays: false,
-      travelTime: 5
-    },
-    {
-      id: 'nature',
-      name: 'Nature Trail',
-      aliases: ['hiking', 'outdoor'],
-      category: 'active',
-      maxCapacity: 2,
-      minCapacity: 1,
-      weatherSensitive: true,
-      linkedAreas: [],
-      bufferPeriods: 0,
-      accessibility: {
-        allowed: ['junior', 'senior'],
-        forbidden: ['toddler']
-      },
-      doubleBooking: {
-        likelihood: 'sometimes',
-        scope: 'sameUnit'
-      },
-      alternatesDays: true,
-      alternateDayOffset: 0,
-      travelTime: 20
-    },
-    {
-      id: 'dining',
-      name: 'Dining Hall',
-      aliases: ['cafeteria', 'mess'],
-      category: 'facility',
-      maxCapacity: 4,
-      minCapacity: 2,
-      weatherSensitive: false,
-      linkedAreas: [],
-      bufferPeriods: 0,
-      accessibility: {
-        allowed: ['toddler', 'junior', 'senior'],
-        forbidden: []
-      },
-      doubleBooking: {
-        likelihood: 'always',
-        scope: 'anyUnit'
-      },
-      alternatesDays: false,
-      travelTime: 0
-    },
-    {
-      id: 'library',
-      name: 'Library',
-      aliases: ['reading', 'quiet'],
-      category: 'educational',
-      maxCapacity: 2,
-      minCapacity: 1,
-      weatherSensitive: false,
-      linkedAreas: [],
-      bufferPeriods: 0,
-      accessibility: {
-        allowed: ['junior', 'senior'],
-        forbidden: ['toddler']
-      },
-      doubleBooking: {
-        likelihood: 'sometimes',
-        scope: 'sameUnit'
-      },
-      alternatesDays: false,
-      travelTime: 8
-    }
-  ],
+  // Periods configuration - to be loaded from .env
+  periods: [],
 
-  // Cabins configuration
-  cabins: [
-    {
-      id: 'cabin1',
-      name: 'Cabin 1',
-      ageGroup: 'junior',
-      unit: 'unitA',
-      size: 8,
-      socialGroups: ['cabin2'],
-      preferences: {
-        favoriteAreas: ['swimming', 'crafts'],
-        avoidAreas: ['library']
-      },
-      restrictions: {
-        blackoutPeriods: [],
-        blackoutAreas: []
-      },
-      priority: 5
-    },
-    {
-      id: 'cabin2',
-      name: 'Cabin 2',
-      ageGroup: 'junior',
-      unit: 'unitA',
-      size: 8,
-      socialGroups: ['cabin1'],
-      preferences: {
-        favoriteAreas: ['archery', 'nature'],
-        avoidAreas: []
-      },
-      restrictions: {
-        blackoutPeriods: [],
-        blackoutAreas: []
-      },
-      priority: 5
-    },
-    {
-      id: 'cabin3',
-      name: 'Cabin 3',
-      ageGroup: 'senior',
-      unit: 'unitB',
-      size: 10,
-      socialGroups: ['cabin4'],
-      preferences: {
-        favoriteAreas: ['archery', 'nature'],
-        avoidAreas: ['crafts']
-      },
-      restrictions: {
-        blackoutPeriods: [],
-        blackoutAreas: []
-      },
-      priority: 3
-    },
-    {
-      id: 'cabin4',
-      name: 'Cabin 4',
-      ageGroup: 'senior',
-      unit: 'unitB',
-      size: 10,
-      socialGroups: ['cabin3'],
-      preferences: {
-        favoriteAreas: ['swimming', 'library'],
-        avoidAreas: []
-      },
-      restrictions: {
-        blackoutPeriods: [],
-        blackoutAreas: []
-      },
-      priority: 3
-    },
-    {
-      id: 'cabin5',
-      name: 'Cabin 5',
-      ageGroup: 'toddler',
-      unit: 'unitC',
-      size: 6,
-      socialGroups: ['cabin6'],
-      preferences: {
-        favoriteAreas: ['crafts', 'dining'],
-        avoidAreas: ['archery', 'nature']
-      },
-      restrictions: {
-        blackoutPeriods: ['evening'],
-        blackoutAreas: ['archery', 'nature']
-      },
-      priority: 8
-    },
-    {
-      id: 'cabin6',
-      name: 'Cabin 6',
-      ageGroup: 'toddler',
-      unit: 'unitC',
-      size: 6,
-      socialGroups: ['cabin5'],
-      preferences: {
-        favoriteAreas: ['crafts', 'dining'],
-        avoidAreas: ['archery', 'nature']
-      },
-      restrictions: {
-        blackoutPeriods: ['evening'],
-        blackoutAreas: ['archery', 'nature']
-      },
-      priority: 8
-    }
-  ],
+  // Activity areas configuration - to be loaded from .env
+  areas: [],
+
+  // Cabins configuration - to be loaded from .env
+  cabins: [],
 
   // Choice periods configuration
-  choicePeriods: [
-    {
-      cabinId: 'cabin1',
-      areaId: 'swimming',
-      periodId: 'morning',
-      day: 1
-    },
-    {
-      cabinId: 'cabin3',
-      areaId: 'archery',
-      periodId: 'afternoon',
-      day: 2
-    }
-  ],
+  choicePeriods: [],
 
   // Manual overrides configuration
-  manualOverrides: [
-    {
-      cabinId: 'cabin5',
-      areaId: 'dining',
-      periodId: 'morning',
-      day: 1
-    }
-  ],
+  manualOverrides: [],
 
   // Blackout periods configuration
-  blackoutPeriods: [
-    {
-      cabinId: 'cabin5',
-      periodId: 'evening',
-      day: 1
-    },
-    {
-      cabinId: 'cabin6',
-      periodId: 'evening',
-      day: 1
-    }
-  ],
+  blackoutPeriods: [],
 
   // Age group priorities configuration
-  ageGroupPriorities: [
-    {
-      ageGroup: 'toddler',
-      areaId: 'crafts',
-      priority: 10
-    },
-    {
-      ageGroup: 'senior',
-      areaId: 'archery',
-      priority: 8
-    },
-    {
-      ageGroup: 'junior',
-      areaId: 'swimming',
-      priority: 6
-    }
-  ],
+  ageGroupPriorities: [],
 
   // Cabin merging model configuration
-  cabinMergingModel: 'none', // Options: 'none', 'sessionSpecific', 'mutableIdentity', 'hierarchical'
-  
+  cabinMergingModel: 'none',
+
   // Merge instructions for cabin merging
-  mergeInstructions: [
-    // Example merge instruction (not used with 'none' model)
-    // {
-    //   cabinId: 'cabin1',
-    //   mergeWith: 'cabin2',
-    //   mergeType: 'temporary'
-    // }
-  ],
+  mergeInstructions: [],
 
   // Area utilization goals
-  areaUtilizationGoals: [
-    {
-      areaId: 'swimming',
-      targetUtilization: 1.5 // Target 1.5 cabins per period on average
-    },
-    {
-      areaId: 'crafts',
-      targetUtilization: 2.0
-    },
-    {
-      areaId: 'nature',
-      targetUtilization: 1.0
-    }
-  ],
+  areaUtilizationGoals: [],
 
   // Scheduler-specific settings
   scheduler: {
     maxIterations: 1000,
     timeoutMs: 30000, // 30 seconds
-    enableBacktracking: false, // Set to true for more robust but slower scheduling
-    constraintViolationThreshold: 5, // Maximum allowed constraint violations
-    enableParallelProcessing: false // Set to true for multi-threaded processing
+    enableBacktracking: false,
+    constraintViolationThreshold: 5,
+    enableParallelProcessing: false
   }
 };
 
 /**
- * Apply environment variable overrides if useEnvVars is true
- * @param {Object} config - Configuration object
- * @returns {Object} Configuration with environment overrides applied
+ * Load configuration from environment variables
  */
-export function applyEnvironmentOverrides(config) {
-  if (!config.useEnvVars) {
-    return config;
-  }
+export function loadConfigFromEnv() {
+  const newConfig = { ...config };
 
-  const overriddenConfig = { ...config };
+  // Load number of periods from .env
+  const numberOfPeriods = parseInt(process.env.NUMBER_OF_PERIODS, 10) || 9;
+  const periodTemplates = [
+    { id: 'morning', name: 'Morning', startTime: 900, endTime: 1200 },
+    { id: 'afternoon', name: 'Afternoon', startTime: 1300, endTime: 1600 },
+    { id: 'evening', name: 'Evening', startTime: 1900, endTime: 2100 },
+  ];
+  newConfig.periods = Array.from({ length: numberOfPeriods }, (_, i) => {
+    const day = Math.floor(i / 3) + 1;
+    const template = periodTemplates[i % 3];
+    return {
+      ...template,
+      day,
+      isChoicePeriod: false,
+      blackoutAreas: []
+    };
+  });
 
-  // Override noRepeatsDays if environment variable is set
-  if (process.env.NO_REPEATS_DAYS) {
-    const noRepeatsDays = parseInt(process.env.NO_REPEATS_DAYS, 10);
-    if (!isNaN(noRepeatsDays)) {
-      overriddenConfig.noRepeatsDays = noRepeatsDays;
-      console.log(`Environment override: NO_REPEATS_DAYS = ${noRepeatsDays}`);
-    }
-  }
+  // Load units from .env
+  const units = (process.env.UNITS || '').split(',').map(u => u.trim());
 
-  // Override allowedTransitionTime if environment variable is set
-  if (process.env.ALLOWED_TRANSITION_TIME) {
-    const allowedTransitionTime = parseInt(process.env.ALLOWED_TRANSITION_TIME, 10);
-    if (!isNaN(allowedTransitionTime)) {
-      overriddenConfig.allowedTransitionTime = allowedTransitionTime;
-      console.log(`Environment override: ALLOWED_TRANSITION_TIME = ${allowedTransitionTime}`);
-    }
-  }
+  // Generate cabins from units
+  newConfig.cabins = units.map((unit, i) => ({
+    id: `cabin${i + 1}`,
+    name: `Cabin ${i + 1}`, // Default name, to be overridden
+    ageGroup: 'default', // Default age group
+    unit: unit,
+    size: 10, // Default size
+    socialGroups: [],
+    preferences: { favoriteAreas: [], avoidAreas: [] },
+    restrictions: { blackoutPeriods: [], blackoutAreas: [] },
+    priority: 5
+  }));
 
-  return overriddenConfig;
+  // Load activity areas from .env
+  const activityAreasStr = process.env.ACTIVITY_AREAS || '';
+  newConfig.areas = activityAreasStr.split(';').map(deptStr => {
+    const [dept, areasStr] = deptStr.split(':');
+    const areas = areasStr.split(',').map(areaName => ({
+      id: areaName,
+      name: areaName.charAt(0).toUpperCase() + areaName.slice(1),
+      maxCapacity: 2, // Default capacity
+    }));
+    return [dept, areas];
+  });
+
+
+  // Load cabin naming template from .env
+  newConfig.cabinNameTemplate = process.env.CABIN_NAME_TEMPLATE || 'existing';
+
+  config = newConfig;
 }
+
 
 /**
  * Validate configuration object for required fields and data integrity
@@ -502,7 +145,10 @@ export function validateConfig(config) {
 
   // Validate areas
   if (config.areas) {
-    config.areas.forEach((area, index) => {
+    // Flatten 2D array for validation
+    const flatAreas = config.areas.flat();
+    flatAreas.forEach((area, index) => {
+      if(typeof area === 'string') return; // Skip department names
       if (!area.id || !area.name || !area.maxCapacity) {
         errors.push(`Area at index ${index} is missing required fields`);
       }
