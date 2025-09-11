@@ -5,18 +5,15 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"npm run dev:public\" \"npm run dev:app\"",
-    "dev:public": "cd public-site && npm run dev",
+    "dev": "npm run dev:app",
     "dev:app": "cd user-app && npm run dev",
-    "build": "npm run build:public && npm run build:app",
-    "build:public": "cd public-site && npm run build",
+    "build": "npm run build:app",
     "build:app": "cd user-app && npm run build",
-    "preview": "concurrently \"npm run preview:public\" \"npm run preview:app\"",
-    "preview:public": "cd public-site && npm run preview",
+    "preview": "npm run preview:app",
     "preview:app": "cd user-app && npm run preview",
-    "install:all": "npm install && cd public-site && npm install && cd ../user-app && npm install",
-    "clean": "rm -rf public-site/dist user-app/dist",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "install:all": "npm install && cd user-app && npm install",
+    "clean": "rm -rf user-app/dist",
+    "test": "node test.js"
   },
   "repository": {
     "type": "git",
@@ -31,7 +28,8 @@
   "homepage": "https://github.com/SamGreenwood1/Camp-Management-App#readme",
   "dependencies": {
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "dotenv": "^16.4.5"
   },
   "devDependencies": {
     "@types/react": "^18.2.0",
